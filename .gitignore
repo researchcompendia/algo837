@@ -11,6 +11,7 @@ Demo/my_amd_f77simple.out
 Demo/my_amd_simple.out
 Lib/libamd.a
 Lib/libamdf77.a
+Data/
 
 # editor files
 *.swp
@@ -18,3 +19,4 @@ Lib/libamdf77.a
 
 #python
 *.py[cod]
+
