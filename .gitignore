@@ -1,0 +1,20 @@
+# executables and output files
+Demo/amd_demo
+Demo/amd_demo2
+Demo/amd_f77demo
+Demo/amd_f77simple
+Demo/amd_simple
+Demo/my_amd_demo.out
+Demo/my_amd_demo2.out
+Demo/my_amd_f77demo.out
+Demo/my_amd_f77simple.out
+Demo/my_amd_simple.out
+Lib/libamd.a
+Lib/libamdf77.a
+
+# editor files
+*.swp
+*~
+
+#python
+*.py[cod]
