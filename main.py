@@ -36,8 +36,10 @@ CHOICES = ['amd_demo', 'amd_demo2', 'amd_simple', 'amd_f77demo', 'amd_f77simple'
 
 
 def run(demo):
-    timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
-    results_file = join(abspath(curdir), 'Data', '%s_%s_results.txt' % (demo, timestamp))
+    #timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+    #results_file = join(abspath(curdir), 'Data', '%s_%s_results.txt' % (demo, timestamp))
+
+    results_file = join(abspath(curdir), 'Data', '%s_results.txt' % demo)
     cmd = join(abspath(curdir), 'Demo', demo)
     with open(results_file, 'w+') as fh:
         subprocess.call(cmd, stdout=fh, stderr=subprocess.PIPE)
@@ -47,7 +49,7 @@ def setup():
     subprocess.call(['make', 'lib', 'fortran'])
 
 
-def cleanup():
+def clean():
     subprocess.call(['make', 'clean'])
 
 
@@ -64,10 +66,19 @@ def build_parser():
 
     """)
     parser.add_argument('-s', '--setup', action='store_true', help='compiles demos')
-    parser.add_argument('-c', '--cleanup', action='store_true', help='cleans compiled files')
+    parser.add_argument('-c', '--clean', action='store_true', help='cleans compiled files')
     parser.add_argument('params', default='default.json', nargs='?',
         help='json file with parameters: { "demos": %s' % CHOICES)
     return parser
+
+
+def main(paramsfile):
+    with open(args.params) as fh:
+        params = json.load(fh)
+        assert 'demos' in params, "missing 'demos' parameter."
+    for demo in params['demos']:
+        assert demo in CHOICES, "invalid demo, choose from %s" % CHOICES
+        result = run(demo)
 
 
 if __name__ == "__main__":
@@ -77,10 +88,7 @@ if __name__ == "__main__":
     if args.setup:
         setup()
 
-    with open(args.params) as fh:
-        params = json.load(fh)
-        assert 'demos' in params, "missing 'demos' parameter."
+    main(args.params)
 
-    for demo in params['demos']:
-        assert demo in CHOICES, "invalid demo, choose from %s" % CHOICES
-        result = run(demo)
+    if args.clean:
+        clean()
